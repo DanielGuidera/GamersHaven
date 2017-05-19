@@ -1,0 +1,31 @@
+﻿
+@using GamersHaven.Models;
+@{
+    ViewBag.Title = "HomePage";
+}
+
+@{    
+    List<ArticleModels> articleList = (List<ArticleModels>)ViewData["ArticleList"];    
+}
+<p></p>
+<div class="Top">
+    <div class="well well-sm" style="width: 1000px">
+        <div class="row" id="TopItems">
+            @{
+                foreach (ArticleModels article in articleList)
+                {
+                    <div class="col-sm-2 col-md-2">
+                        <div class="thumbnail">
+                            <img src=@article.thumbnail alt="...">
+                            <div class="caption">
+                                <h3>@article.title</h3>                                
+                                <p>@Html.ActionLink("Read", "Read", "Article", new { _ID = article.ID }, new { @class = "btn btn-default" })</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
