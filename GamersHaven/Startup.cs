@@ -28,7 +28,7 @@ namespace GamersHaven
                 CreateRole(roleManager, roleName);
 
                 var user = new ApplicationUser();
-                var chkUser = CreateDefaultAdmin(ref user, userManager, "Admin", "danielguider1@gmail.com", "Mypsw64!");
+                var chkUser = CreateDefaultUser(ref user, userManager, "Admin", "danielguider1@gmail.com", "Mypsw64!");
 
                 if (chkUser.Succeeded)
                 {
@@ -42,7 +42,7 @@ namespace GamersHaven
                 CreateRole(roleManager, roleName);
 
                 var user = new ApplicationUser();
-                var chkUser = CreateDefaultAdmin(ref user, userManager, "User", "daniel_guidera@hotmail.com", "Mypsw65!");
+                var chkUser = CreateDefaultUser(ref user, userManager, "User", "daniel_guidera@hotmail.com", "Mypsw65!");
 
                 if (chkUser.Succeeded)
                 {
@@ -58,7 +58,7 @@ namespace GamersHaven
             roleManager.Create(role);
         }
 
-        public IdentityResult CreateDefaultAdmin(ref ApplicationUser user, UserManager<ApplicationUser> userManager, string userName, string email, string pwd)
+        public IdentityResult CreateDefaultUser(ref ApplicationUser user, UserManager<ApplicationUser> userManager, string userName, string email, string pwd)
         {            
             user.UserName = userName;
             user.Email = email;
