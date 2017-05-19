@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GamersHaven.Models;
+using GamersHaven.DAL;
+using System.Web.Security;
 
 namespace GamersHaven.Controllers
 {
@@ -74,8 +76,9 @@ namespace GamersHaven.Controllers
             }
 
             // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            // To enable password failures to trigger account lockout, change to shouldLockout: true                                              
+            var result = await SignInManager.PasswordSignInAsync(GetUsernameFromEmail(model), model.Password, model.RememberMe, shouldLockout: false);
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -91,6 +94,18 @@ namespace GamersHaven.Controllers
             }
         }
 
+        public string GetUsernameFromEmail(LoginViewModel model)
+        {
+            SiteContext context = new SiteContext();
+            var users = context.Users.Where(b => b.Email == model.Email);
+            string userName = string.Empty;
+            foreach (var user in users)
+            {
+                userName = user.UserName;
+            }
+
+            return userName;
+        }
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
