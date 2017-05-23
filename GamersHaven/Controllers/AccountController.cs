@@ -76,8 +76,9 @@ namespace GamersHaven.Controllers
             }
 
             // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true                                              
-            var result = await SignInManager.PasswordSignInAsync(GetUsernameFromEmail(model), model.Password, model.RememberMe, shouldLockout: false);
+            // To enable password failures to trigger account lockout, change to shouldLockout: true   
+            UserAccess userAccess = new UserAccess();
+            var result = await SignInManager.PasswordSignInAsync(userAccess.GetUsernameFromEmail(model), model.Password, model.RememberMe, shouldLockout: false);
 
             switch (result)
             {
@@ -93,19 +94,7 @@ namespace GamersHaven.Controllers
                     return View(model);
             }
         }
-
-        public string GetUsernameFromEmail(LoginViewModel model)
-        {
-            SiteContext context = new SiteContext();
-            var users = context.Users.Where(b => b.Email == model.Email);
-            string userName = string.Empty;
-            foreach (var user in users)
-            {
-                userName = user.UserName;
-            }
-
-            return userName;
-        }
+        
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

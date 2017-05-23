@@ -83,5 +83,12 @@
                     }
                 }*@
         </dd>
+        <dd>
+            @if (HttpContext.Current.User.IsInRole("Admin"))
+            {                
+                <p>@Html.ActionLink("Article Reports", "Reports", "Admin", new { type = ReportType.Type.Article }, new { @class = "btn btn-default" })</p>
+                <p>@Html.ActionLink("Comment Reports", "Reports", "Admin", new { type = ReportType.Type.Comment }, new { @class = "btn btn-default" })</p>
+            }
+        </dd>
     </dl>
 </div>

@@ -1,0 +1,65 @@
+﻿@using GamersHaven.Models;
+@{
+    ViewBag.Title = "Reports";
+    //List<ReportModel> reportList = (List<ReportModel>)ViewData["Reports"];
+}
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+
+<div>   
+    <table>
+        <tr>
+            <th>
+                Report ID
+            </th>
+            <th>
+                Article ID
+            </th>
+            <th>
+                Report Type
+            </th> 
+            <th>
+                Action
+            </th>
+        </tr>
+
+        @foreach (var report in Model)
+        {            
+            string articleID = @report.articleID.ToString();
+            <tr>
+                <td>
+                    @report.ID
+                </td>
+                <td>
+                    @Html.ActionLink(articleID, "Read", "Article", new { _ID = report.ID }, new { @class = "Active"})                    
+                </td>
+                <td>
+                    @report.type
+                </td>
+                <td>
+                    <p><a href="@Url.Action("HomePage", "Home", new { report.articleID })" data-toggle="confirmation">Delete Article</a></p>
+                    @*<p><a data-toggle="confirmation" href="@Url.Action("DeleteReport", "Admin", new { reportID = report.ID })">Delete Report</a></p>*@
+                    <a class="btn btn-large btn-primary" data-toggle="confirmation" data-title="Open Google?"
+                       href="https://google.com" target="_blank">Confirmation</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+
