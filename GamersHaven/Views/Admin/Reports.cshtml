@@ -3,6 +3,15 @@
     ViewBag.Title = "Reports";
     //List<ReportModel> reportList = (List<ReportModel>)ViewData["Reports"];
 }
+<link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://bootstrap-confirmation.js.org/assets/css/docs.min.css" rel="stylesheet">
+<link href="http://bootstrap-confirmation.js.org/assets/css/style.css" rel="stylesheet">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="http://bootstrap-confirmation.js.org/assets/js/docs.min.js"></script>
+<script src="http://bootstrap-confirmation.js.org/dist/bootstrap-confirmation2/bootstrap-confirmation.min.js"></script>
+
 <style>
     table {
         font-family: arial, sans-serif;
@@ -21,7 +30,7 @@
     }
 </style>
 
-<div>   
+<div>
     <table>
         <tr>
             <th>
@@ -32,34 +41,33 @@
             </th>
             <th>
                 Report Type
-            </th> 
+            </th>
             <th>
                 Action
             </th>
         </tr>
 
         @foreach (var report in Model)
-        {            
+        {
             string articleID = @report.articleID.ToString();
             <tr>
                 <td>
                     @report.ID
                 </td>
                 <td>
-                    @Html.ActionLink(articleID, "Read", "Article", new { _ID = report.ID }, new { @class = "Active"})                    
+                    @Html.ActionLink(articleID, "Read", "Article", new { _ID = report.ID }, new { @class = "Active" })
                 </td>
                 <td>
                     @report.type
                 </td>
                 <td>
-                    <p><a href="@Url.Action("HomePage", "Home", new { report.articleID })" data-toggle="confirmation">Delete Article</a></p>
-                    @*<p><a data-toggle="confirmation" href="@Url.Action("DeleteReport", "Admin", new { reportID = report.ID })">Delete Report</a></p>*@
-                    <a class="btn btn-large btn-primary" data-toggle="confirmation" data-title="Open Google?"
-                       href="https://google.com" target="_blank">Confirmation</a>
+                    @*<p><a href="@Url.Action("HomePage", "Home", new { report.articleID })" data-toggle="confirmation">Delete Article</a></p>*@
+                    <p><a data-toggle="confirmation" href="@Url.Action("DeleteReport", "Admin", new { reportID = report.ID })">Delete Report</a></p>
                 </td>
             </tr>
         }
     </table>
+    <script>
+        $('[data-toggle=confirmation]').confirmation();
+    </script>
 </div>
-
-

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using GamersHaven.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace GamersHaven.DAL
 {
-    public class SiteInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<SiteContext>
+    public class SiteInitializer : System.Data.Entity.DropCreateDatabaseAlways<SiteContext>
     {
         protected override void Seed(SiteContext context)
         {
@@ -22,6 +24,61 @@ namespace GamersHaven.DAL
 
             articles.ForEach(s => context.Articles.Add(s));
             context.SaveChanges();
+
+            CreateSiteRoles();
+        }
+
+        public void CreateSiteRoles()
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            string roleName = "Admin";
+            if (!roleManager.RoleExists(roleName))
+            {
+                CreateRole(roleManager, roleName);
+
+                var user = new ApplicationUser();
+                var chkUser = CreateDefaultUser(ref user, userManager, "Admin", "danielguidera1@gmail.com", "Mypsw64!");
+
+                if (chkUser.Succeeded)
+                {
+                    var result1 = userManager.AddToRole(user.Id, roleName);
+                }
+            }
+
+            roleName = "User";
+            if (!roleManager.RoleExists(roleName))
+            {
+                CreateRole(roleManager, roleName);
+
+                var user = new ApplicationUser();
+                var chkUser = CreateDefaultUser(ref user, userManager, "User", "daniel_guidera@hotmail.com", "Mypsw65!");
+
+                if (chkUser.Succeeded)
+                {
+                    var result1 = userManager.AddToRole(user.Id, roleName);
+                }
+            }
+        }
+
+        public void CreateRole(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+            var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+            role.Name = roleName;
+            roleManager.Create(role);
+        }
+
+        public IdentityResult CreateDefaultUser(ref ApplicationUser user, UserManager<ApplicationUser> userManager, string userName, string email, string pwd)
+        {
+            user.UserName = userName;
+            user.Email = email;
+
+            string userPWD = pwd;
+
+            return userManager.Create(user, userPWD);
         }
     }
 }
