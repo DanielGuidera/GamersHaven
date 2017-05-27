@@ -22,10 +22,11 @@ namespace GamersHaven.Controllers
 
         }
 
-        public void DeleteReport(int reportID)
+        public ActionResult DeleteReport(int reportID)
         {
             ReportAccess access = new ReportAccess();
             ViewData["ReportMessage"] = access.DeleteReport(reportID);
+            return View("~/Views/Article/ReportMessage.cshtml");
         }
     }
 }

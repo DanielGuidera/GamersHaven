@@ -19,7 +19,11 @@
                 <h1 class="media-heading">@articleInfo.title</h1>
                 @articleInfo.blurb
                 <p></p>
-                <a target="_blank" href="@articleInfo.link" class="btn btn-primary">Source</a> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Report</button>
+                <a target="_blank" href="@articleInfo.link" class="btn btn-primary">Source</a> 
+                @if (HttpContext.Current.User.IsInRole("User") || HttpContext.Current.User.IsInRole("Admin"))
+                {
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Report</button>
+                }                
             </div>
         </div>        
     </div>
