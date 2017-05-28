@@ -12,7 +12,9 @@ namespace GamersHaven.Controllers
     {
         // GET: Report
         public ActionResult Reports(ReportType.Type type)
-        {            
+        {
+            List<string> articleReportHeaders = new List<string> { "Report ID", "Article ID", "Report Type", "Action" };
+            ViewData["Headers"] = articleReportHeaders;
             SiteContext db = new SiteContext();            
             return View(db.Reports.ToList());
         }
@@ -23,9 +25,9 @@ namespace GamersHaven.Controllers
         }
 
         public ActionResult DeleteReport(int reportID)
-        {
+        {            
             ReportAccess access = new ReportAccess();
-            ViewData["ReportMessage"] = access.DeleteReport(reportID);
+            ViewData["ReportMessage"] = access.DeleteReport(reportID);            
             return View("~/Views/Article/ReportMessage.cshtml");
         }
     }
