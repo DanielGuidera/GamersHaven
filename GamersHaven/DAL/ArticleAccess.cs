@@ -48,5 +48,29 @@ namespace GamersHaven.DAL
 
             return count;
         }
+
+        public string DeleteArticle(int articleID, int reportID, out bool isSucceed)
+        {
+            var articles = context.Articles.ToList();
+            int exists = (from row in articles
+                          where row.ID == articleID
+                          select row).Count();
+
+            if (exists > 0)
+            {
+                ReportAccess access = new ReportAccess();
+                var article = context.Articles.First(i => i.ID == articleID);
+                context.Articles.Remove(article);
+                context.SaveChanges();
+                
+                access.DeleteReport(reportID, out isSucceed);                
+                return "Article has been deleted";
+            }
+            else
+            {
+                isSucceed = false;
+                return "Article does not exist";
+            }
+        }
     }
 }

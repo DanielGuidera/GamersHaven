@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Reports";    
     List<string> headers = (List<string>)ViewData["Headers"];
+    bool messageReturned = (bool)ViewData["MessageReturned"];
 }
 <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://bootstrap-confirmation.js.org/assets/css/docs.min.css" rel="stylesheet">
@@ -36,19 +37,7 @@
             @foreach(string header in headers)
             {
                 <th>@header</th>
-            }
-            @*<th>
-                Report ID
-            </th>
-            <th>
-                Article ID
-            </th>
-            <th>
-                Report Type
-            </th>
-            <th>
-                Action
-            </th>*@
+            }            
         </tr>
 
         @foreach (var report in Model)
@@ -65,12 +54,31 @@
                     @report.type
                 </td>
                 <td>
-                    @*<p><a href="@Url.Action("HomePage", "Home", new { report.articleID })" data-toggle="confirmation">Delete Article</a></p>*@
+                    <a data-toggle="confirmation" href="@Url.Action("DeleteReportedArticle", "Admin", new { articleID = report.articleID, reportID = report.ID })">Delete Article</a>
                     <p><a data-toggle="confirmation" href="@Url.Action("DeleteReport", "Admin", new { reportID = report.ID })">Delete Report</a></p>
                 </td>
             </tr>
         }
     </table>
+    @if (messageReturned)
+    {       
+        bool isSucceed = (bool)ViewData["IsSucceed"];
+        if (isSucceed)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong>@ViewData["Message"]
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Warning!</strong>@ViewData["Message"]
+            </div>
+        }
+    }
+
     <script>
         $('[data-toggle=confirmation]').confirmation();
     </script>

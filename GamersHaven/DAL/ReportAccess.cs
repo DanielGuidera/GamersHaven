@@ -50,7 +50,7 @@ namespace GamersHaven.DAL
             return context.Reports.ToList();
         }
 
-        public string DeleteReport(int reportID)
+        public string DeleteReport(int reportID, out bool isSucceed)
         {
             var reports = GetReports();
             int exists = (from row in reports
@@ -62,10 +62,13 @@ namespace GamersHaven.DAL
                 var report = context.Reports.First(i => i.ID == reportID);
                 context.Reports.Remove(report);
                 context.SaveChanges();
+
+                isSucceed = true;
                 return "Report has been deleted";
             }
             else
             {
+                isSucceed = false;
                 return "Report does not exist";
             }            
         }
