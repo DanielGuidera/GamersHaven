@@ -10,7 +10,7 @@ namespace GamersHaven.DAL
     {
         private SiteContext context = new SiteContext();
         
-        public string ReportArticle(int articleID, ReportModel.reportType reportType)
+        public string ReportArticle(int articleID, ReportModel.reportType reportType, out bool isSucceed)
         {
             var reports = GetReports();
             int exists = (from row in reports
@@ -36,11 +36,12 @@ namespace GamersHaven.DAL
                 newReport.type = reportType;
                 context.Reports.Add(newReport);
                 context.SaveChanges();
-
+                isSucceed = true;
                 return "Article has been reported. Category: "+ reportType + "";
             }
             else
             {
+                isSucceed = false;
                 return "Article has already been reported for category of " + reportType + "";
             }         
         }
