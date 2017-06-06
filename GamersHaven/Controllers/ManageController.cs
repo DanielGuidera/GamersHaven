@@ -52,7 +52,7 @@ namespace GamersHaven.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index(ManageMessageId? message, string result = "", bool isSuccess = false)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
@@ -72,6 +72,10 @@ namespace GamersHaven.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+
+            ViewData["Message"] = result;
+            ViewData["IsSuccess"] = isSuccess;            
+            
             return View(model);
         }
 

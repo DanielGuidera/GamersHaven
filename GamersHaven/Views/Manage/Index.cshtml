@@ -1,42 +1,102 @@
-﻿@model GamersHaven.Models.IndexViewModel
-@{
-    ViewBag.Title = "Manage";
-}
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        @model GamersHaven.Models.IndexViewModel
+        @{
+            ViewBag.Title = "Manage";
+            string message = (string)ViewData["Message"];
+            bool isSuccess = (bool)ViewData["IsSuccess"];
+        }
 
-<h2>@ViewBag.Title.</h2>
+       
+    </head>
+    <body>
+        <h2>@ViewBag.Title.</h2>
 
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
-            @if (Model.HasPassword)
+        <p class="text-success">@ViewBag.StatusMessage</p>
+        <div>            
+            <h4>Change your account settings</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>Password:</dt>
+                <dd>
+                    [
+                    @if (Model.HasPassword)
             {
-                @Html.ActionLink("Change your password", "ChangePassword")
+                        @Html.ActionLink("Change your password", "ChangePassword")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword")
+                    }
+                    ]
+                </dd>
+                <dt>External Logins:</dt>
+                <dd>
+                    @Model.Logins.Count [
+                    @Html.ActionLink("Manage", "ManageLogins") ]
+                </dd>
+
+                @if (HttpContext.Current.User.IsInRole("Admin"))
+                {
+                    <dt>Reports:</dt>
+                    <dd>
+                        [@Html.ActionLink("Article Reports", "Reports", "Admin", new { type = ReportType.Type.Article }, new { @class = "" })]
+                        &nbsp
+                        [@Html.ActionLink("Comment Reports", "Reports", "Admin", new { type = ReportType.Type.Comment }, new { @class = "" })]
+                    </dd>
+
+                    <dt>New Admin:</dt>
+                    <dd>
+                        [<a href="#" data-toggle="modal" data-target="#myModal">Add Administrator</a>]
+                    </dd>
+                }
+            </dl>
+        </div>
+
+        @if (message != "")
+        {            
+            if ((bool)ViewData["IsSuccess"])
+            {
+                <div class="alert alert-success alert-dismissible" role="alert" id="success">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Success! </strong>@ViewData["Message"]
+                </div>
             }
             else
             {
-                @Html.ActionLink("Create", "SetPassword")
+                <div class="alert alert-danger alert-dismissible" role="alert" id="fail">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Warning! </strong>@message
+                </div>
             }
-            ]
-        </dd>
-        <dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>
-       
-        @if (HttpContext.Current.User.IsInRole("Admin"))
-        {
-            <dt>Reports:</dt>
-            <dd>
-                [@Html.ActionLink("Article Reports", "Reports", "Admin", new { type = ReportType.Type.Article }, new { @class = "" })]
-                &nbsp
-                [@Html.ActionLink("Comment Reports", "Reports", "Admin", new { type = ReportType.Type.Comment }, new { @class = "" })]
-            </dd>
         }
-    </dl>
-</div>
+
+        <form action="/Admin/PromoteUserToAdmin" method="post">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Add a New Administrator</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            User Name: <input type="text" name="userName" class="form-control" />
+                            Admin Password: <input type="password" name="adminPsw" class="form-control" />                                                        
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Promote" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>               
+    </body>
+</html>
+
+
+
+
+
+
