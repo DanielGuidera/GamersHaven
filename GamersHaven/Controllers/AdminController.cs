@@ -50,26 +50,53 @@ namespace GamersHaven.Controllers
 
         [HttpPost]
         public ActionResult PromoteUserToAdmin(string username, string adminPsw)
-        {            
-            ApplicationDbContext context = new ApplicationDbContext();
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-
-            var user = userManager.FindByName(User.Identity.Name);
-            var pswResult = userManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, adminPsw);
+        {
+            var pswResult = VerifyAdmin(adminPsw);
             
             if (pswResult == PasswordVerificationResult.Success)
             {
                 UserAccess access = new UserAccess();
                 bool isSuccess;
                 string result = access.PromoteUserToAdmin(username, out isSuccess);
-                return RedirectToAction("Index", "Manage", new { result = result, isSuccess = isSuccess });
+                return RedirectToManage(result, isSuccess);
             }
             else
             {
-                string result = "Your entered password was incorrect";
-                bool isSuccess = false;
-                return RedirectToAction("Index", "Manage", new { result = result, isSuccess = isSuccess });
+                string result = "You entered the wrong password";
+                return RedirectToManage(result, false);
             }            
+        }        
+
+        [HttpPost]
+        public ActionResult DemoteAdmin(string username, string adminPsw)
+        {
+            var pswResult = VerifyAdmin(adminPsw);
+            if(pswResult == PasswordVerificationResult.Success)
+            {
+                UserAccess access = new UserAccess();
+                bool isSuccess;
+                string result = access.DemoteAdmin(username, out isSuccess);
+                return RedirectToManage(result, isSuccess);
+            }
+            else
+            {
+                string result = "You entered the wrong password";
+                return RedirectToManage(result, false);
+            }
+        }
+
+        private PasswordVerificationResult VerifyAdmin(string adminPsw)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            var user = userManager.FindByName(User.Identity.Name);
+            return userManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, adminPsw);
+        }
+
+        private ActionResult RedirectToManage(string result, bool isSuccess)
+        {                        
+            return RedirectToAction("Index", "Manage", new { result = result, isSuccess = isSuccess });
         }
     }
 }

@@ -48,7 +48,9 @@
 
                     <dt>New Admin:</dt>
                     <dd>
-                        [<a href="#" data-toggle="modal" data-target="#myModal">Add Administrator</a>]
+                        [<a href="#" data-toggle="modal" data-target="#promoteModel">Promote Administrator</a>]
+                        &nbsp;
+                        [<a href="#" data-toggle="modal" data-target="#demoteModal">Demote Administrator</a>]
                     </dd>
                 }
             </dl>
@@ -72,8 +74,9 @@
             }
         }
 
+        
         <form action="/Admin/PromoteUserToAdmin" method="post">
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal fade" id="promoteModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -86,7 +89,28 @@
                             Admin Password: <input type="password" name="adminPsw" class="form-control" />                                                        
                         </div>
                         <div class="modal-footer">
-                            <input type="submit" value="Promote" class="btn btn-default" />
+                            <input type="submit" value="Promote" class="btn btn-default" /> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>               
+
+        <form action="/Admin/DemoteAdmin" method="post">
+            <div class="modal fade" id="demoteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Remove an Administrator</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            User Name: <input type="text" name="userName" class="form-control" />
+                            Admin Password: <input type="password" name="adminPsw" class="form-control" />
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" value="Demote" class="btn btn-default" />
                         </div>
                     </div>
                 </div>

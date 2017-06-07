@@ -59,8 +59,34 @@ namespace GamersHaven.DAL
             {
                 isSuccess = false;
                 return "Failed to add " + userName +" to administrator group. Could not find the user";
+            }            
+        }
+
+        public string DemoteAdmin(string userName, out bool isSuccess)
+        {
+            string ID = GetUserIDFromUserName(userName);
+            ApplicationDbContext context = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+            if (ID != null && ID != string.Empty)
+            {
+                if (userManager.IsInRole(ID, "Admin"))
+                {
+                    var result = userManager.RemoveFromRole(ID, "Admin");
+                    isSuccess = true;
+                    return "User " + userName + " has been removed from the administrator group";
+                }
+                else
+                {
+                    isSuccess = false;
+                    return "User " + userName + " is not an administrator";
+                }
             }
-            
+            else
+            {
+                isSuccess = false;
+                return "Failed to remove " + userName + " from the administrator group. Could not find the user";
+            }            
         }
     }
 }
