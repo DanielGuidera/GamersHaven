@@ -16,7 +16,8 @@ namespace GamersHaven.DAL
             //var context = new SiteContext();
             articleData = context.Articles.Find(ID);
 
-            if (articleData.status == ArticleModels.Status.Failed)
+
+            if (articleData == null || articleData.status == ArticleModels.Status.Failed)
             {
                 return false;
             }
@@ -72,5 +73,58 @@ namespace GamersHaven.DAL
                 return "Article does not exist";
             }
         }
+        public string ApproveArticle(string userName, int articleID, out bool isSuccessful)
+        {
+            var articles = context.Articles.ToList();
+            int exists = (from row in articles
+                          where row.ID == articleID
+                          select row).Count();
+            
+            if (exists > 0)
+            {
+                ApprovalAccess access = new ApprovalAccess();
+                UserAccess userAccess = new UserAccess();
+                var userID = userAccess.GetUserIDFromUserName(userName);
+                var approvalExists = access.ApprovalExists(userID, articleID);
+                if(!approvalExists)
+                {
+                    var article = context.Articles.First(i => i.ID == articleID);
+                    if (article.approvals < 10)
+                    {
+                        article.approvals += 1;
+                        context.SaveChanges();
+                        if (article.approvals == 10)
+                        {
+                            ManageArticleStatus(article, ArticleModels.Status.Approved);
+                        }
+                        isSuccessful = true;
+                        access.LogApproval(userID, articleID);
+                        return "Approval Added";
+                    }
+                    else
+                    {
+                        isSuccessful = false;
+                        return "Article has already been approved";
+                    }
+                }
+                else
+                {
+                    isSuccessful = false;
+                    return "You have already approved this article";
+                }
+                
+            }
+            else
+            {
+                isSuccessful = false;
+                return "Article no longer exists";
+            }
+        }
+
+        private void ManageArticleStatus(ArticleModels article, ArticleModels.Status newStatus)
+        {
+            article.status = newStatus;
+            context.SaveChanges();
+        }       
     }
 }

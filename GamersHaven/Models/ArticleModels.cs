@@ -15,6 +15,7 @@ namespace GamersHaven.Models
         public string link { get; set; }
         public Status status { get; set; }
         public bool reported { get; set; }
+        public int approvals { get; set; }
         public enum Status
         {
             Approved,

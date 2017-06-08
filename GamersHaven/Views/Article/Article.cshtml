@@ -3,8 +3,8 @@
     ViewBag.Title = "Article";
 }
 
-@{
-    ArticleModels articleInfo = (ArticleModels)ViewData["ArticleInfo"];       
+@{   
+    ArticleModels articleInfo = (ArticleModels)ViewData["ArticleInfo"];    
 }
 <p></p>
 <div class="Top">
@@ -22,6 +22,12 @@
                 <a target="_blank" href="@articleInfo.link" class="btn btn-primary">Source</a> 
                 @if (HttpContext.Current.User.IsInRole("User") || HttpContext.Current.User.IsInRole("Admin"))
                 {
+                    if (articleInfo.status == ArticleModels.Status.Pending)
+                    {
+                        @*<button type="button" class="btn btn-success">Approve <span class="badge">@articleInfo.approvals.ToString()</span></button>*@
+                        <a href="@Url.Action("Approve", "Article", new { articleID = articleInfo.ID })" class="btn btn-success">Approve <span class="badge">@articleInfo.approvals.ToString()</span></a>
+                        @*@Html.ActionLink("Approve " +@<span class="badge">@articleInfo.approvals.ToString()</span>+"", "Approve", "Article", new { articleID = articleInfo.ID }, new { @class = "btn btn-success" })*@
+                    }
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Report</button>
                 }                
             </div>

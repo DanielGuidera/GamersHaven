@@ -23,7 +23,7 @@ namespace GamersHaven.DAL
             return userName;
         }
 
-        private string GetUserIDFromUserName(string userName)
+        public string GetUserIDFromUserName(string userName)
         {
             SiteContext context = new SiteContext();
             var users = context.Users.Where(b => b.UserName == userName);

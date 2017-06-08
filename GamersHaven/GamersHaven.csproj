@@ -202,6 +202,7 @@
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="DAL\ApprovalAccess.cs" />
     <Compile Include="DAL\ArticleAccess.cs" />
     <Compile Include="DAL\ReportAccess.cs" />
     <Compile Include="DAL\SiteContext.cs" />
@@ -212,6 +213,7 @@
     </Compile>
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApprovalsModel.cs" />
     <Compile Include="Models\ArticleModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

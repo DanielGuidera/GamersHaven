@@ -42,6 +42,13 @@ namespace GamersHaven.Controllers
             bool isSucceed;
             return Read(articleID, access.ReportArticle(articleID, reportType, out isSucceed), isSucceed);
             //return View("ReportMessage");                    
-        }        
+        }
+
+        public ActionResult Approve(int articleID)
+        {
+            bool isSucceed;
+            ArticleAccess access = new ArticleAccess();
+            return Read(articleID, access.ApproveArticle(User.Identity.Name, articleID, out isSucceed), isSucceed);
+        }
     }
 }

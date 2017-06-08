@@ -17,6 +17,7 @@ namespace GamersHaven.DAL
         }
         public DbSet<ArticleModels> Articles { get; set; }
         public DbSet<ReportModel> Reports { get; set; }
+        public DbSet<ApprovalsModel> Approvals { get; set; }
         //public DbSet<ApplicationUser> Users { get; set; }
         
 
